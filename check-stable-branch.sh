@@ -7,7 +7,7 @@ TMP_DIR=$(mktemp --directory --tmpdir dynare-stable-XXXXXXXXXX)
 RESULTS_MATLAB=$TMP_DIR/dynare/tests/run_test_matlab_output.txt
 RESULTS_OCTAVE=$TMP_DIR/dynare/tests/run_test_octave_output.txt
 MATLAB_VERSION=R2014a
-LAST_RAN_COMMIT=/home/dynbot/last-ran-testsuite-stable.txt
+LAST_RAN_COMMIT=/home/dynbot/testsuite/last-ran-testsuite-stable.txt
 
 {
     cd $TMP_DIR
