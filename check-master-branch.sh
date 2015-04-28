@@ -14,7 +14,7 @@ LAST_RAN_COMMIT=/home/dynbot/last-ran-testsuite-master.txt
 
 {
     cd $TMP_DIR
-    git clone http://www.dynare.org/git/dynare.git
+    git clone --depth 1 --recursive --branch master --single-branch git@github.com:DynareTeam/dynare.git
     cd dynare
     COMMIT=$(git log -1 --pretty=oneline HEAD)
     if [[ -f $LAST_RAN_COMMIT && "$(cat $LAST_RAN_COMMIT)" == "$(echo $COMMIT)" ]]; then
