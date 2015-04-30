@@ -64,6 +64,10 @@ LAST_RAN_COMMIT=/home/dynbot/testsuite/last-ran-testsuite-master.txt
 	cat $LOGFILE | $BASEDIR/ansi2html.sh > footer.html
 	scp footer.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/footer.html
 	rm footer.html
+	# Build archive containing all the logs
+	tar -jcvf matlablogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
+	tar -jcvf octavelogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
+	scp *.tar.bz2 kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/
         set -e
     fi
 } >$LOGFILE 2>&1
