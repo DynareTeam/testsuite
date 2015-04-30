@@ -41,14 +41,14 @@ LAST_RAN_COMMIT=/home/dynbot/testsuite/last-ran-testsuite-master.txt
 	# Write and send footers
 	{
 	    echo "# Matlab testsuite (master branch)"
-	    echo "Commit [$(git log --pretty=format:'%h' -n 1)](https://github.com/DynareTeam/dynare/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
+	    echo "Last commit [$(git log --pretty=format:'%h' -n 1)](https://github.com/DynareTeam/dynare/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
 	} > header.md
 	pandoc header.md -o header.html
 	scp header.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/matlab/header.html
 	rm header.*
 	{
 	    echo "# Octave testsuite (master branch)"
-	    echo "Commit [$(git log --pretty=format:'%h' -n 1)](https://github.com/DynareTeam/dynare/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
+	    echo "Last commit [$(git log --pretty=format:'%h' -n 1)](https://github.com/DynareTeam/dynare/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
 	} > header.md
 	pandoc header.md -o header.html
 	scp header.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/octave/header.html
