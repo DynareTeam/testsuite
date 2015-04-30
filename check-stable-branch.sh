@@ -75,7 +75,6 @@ else
         cat $RESULTS_OCTAVE || echo -e "Dynare failed to compile or Octave testsuite failed to run\n"
         echo "A full log can be found at http://www.dynare.org/testsuite/stable"
     } | mail -s "Status of testsuite in stable branch (4.4)" dev@dynare.org -aFrom:"Dynare Robot <dynbot@dynare.org>"
-    
 fi
 
-rm -rf $TMP_DIR
+#rm -rf $TMP_DIR

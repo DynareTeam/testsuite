@@ -77,4 +77,4 @@ else
     } | mail -s "Status of testsuite in master branch" dev@dynare.org -aFrom:"Dynare Robot <dynbot@dynare.org>"
 fi
 
-rm -rf $TMP_DIR
+#rm -rf $TMP_DIR
