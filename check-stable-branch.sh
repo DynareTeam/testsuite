@@ -27,14 +27,16 @@ LAST_RAN_COMMIT=/home/dynbot/testsuite/last-ran-testsuite-stable.txt
         set +e
 	# Run tests (matlab and octave)
         make -C tests -j8 check
-	cd tests
+	cd $TMP_DIR/dynare/tests
 	# Copy the generated log files...
-	cp --parents `find -name \*.m.log` ../tests.logs.m
-	cp --parents `find -name \*.o.log` ../tests.logs.o
-	cd ..
+	mkdir $TMP_DIR/dynare/tests.logs.m
+	mkdir $TMP_DIR/dynare/tests.logs.o
+	cp --parents `find -name \*.m.log` $TMP_DIR/dynare/tests.logs.m
+	cp --parents `find -name \*.o.log` $TMP_DIR/dynare/tests.logs.o
+	cd $TMP_DIR/dynare
 	# ... and send them on kirikou.
-	rsync -az tests.logs.m/* kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/stable/matlab
-	rsync -az tests.logs.o/* kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/stable/octave
+	rsync -az $TMP_DIR/dynare/tests.logs.m/* kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/stable/matlab
+	rsync -az $TMP_DIR/dynare/tests.logs.o/* kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/stable/octave
 	# Write and send footers
 	{
 	    echo "# Matlab testsuite (stable branch)"
