@@ -55,7 +55,7 @@ LAST_RAN_COMMIT=/home/dynbot/testsuite/last-ran-testsuite-master.txt
 	rm header.*
 	# Write and send footers
 	{
-	    echo "Produced by dynbot on karaba $(date)."
+	    echo "Produced by $USER on $(hostname) $(date)."
 	} > footer.md
 	pandoc footer.md -o footer.html
 	scp footer.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/matlab/footer.html
