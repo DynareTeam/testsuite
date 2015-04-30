@@ -2,6 +2,7 @@
 
 set -ex
 
+BASEDIR=$(pwd)
 LOGFILE=$(mktemp --tmpdir dynare-master-check-XXXXXXXXXX.log)
 TMP_DIR=$(mktemp --directory --tmpdir dynare-master-XXXXXXXXXX)
 RESULTS_MATLAB=$TMP_DIR/dynare/tests/run_test_matlab_output.txt
@@ -60,6 +61,9 @@ LAST_RAN_COMMIT=/home/dynbot/testsuite/last-ran-testsuite-master.txt
 	scp footer.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/matlab/footer.html
 	scp footer.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/octave/footer.html
 	rm footer.*
+	cat $LOGFILE | $BASEDIR/ansi2html.sh > footer.html
+	scp footer.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/footer.html
+	rm footer.html
         set -e
     fi
 } >$LOGFILE 2>&1
