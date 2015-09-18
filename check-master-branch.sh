@@ -2,33 +2,39 @@
 
 set -ex
 
-TESTSUITE_CODE_PATH=$(dirname $(realpath -s $0))
-LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
-
-# Set paths for Dynare and tests
-LOGFILE=$(mktemp --tmpdir dynare-master-check-XXXXXXXXXX.log)
-TMP_DIR=$(mktemp --directory --tmpdir dynare-master-XXXXXXXXXX)
-RESULTS_MATLAB=$TMP_DIR/dynare/tests/run_test_matlab_output.txt
-RESULTS_OCTAVE=$TMP_DIR/dynare/tests/run_test_octave_output.txt
-
-# Set user name
+# Set user name (default value)
 USER=dynbot
 
-# Set variables for matlab location
+# Set variables for matlab location (default values)
 MATLAB_VERSION=R2014a
 MATLAB_PATH=/usr/local/MATLAB
 
-# Set variables related to the publication of the results
+# Set variables related to the publication of the results (default values)
 SERVER_PATH=kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master
 HTTP_PATH=http://www.dynare.org/testsuite/master
 MAILTO=dev@dynare.org
 MAILFROM=dynbot@dynare.org
 
-# Set the number of threads to be used by make
+# Set the number of threads to be used by make (default value)
 THREADS=8
 
-#
+# Change default values for the previous variables
+if [ -f  $SCRIPTPATH/configure.inc ]
+  then
+    source $SCRIPTPATH/configure.inc
+fi
 
+# Set path to testsuite's code.
+TESTSUITE_CODE_PATH=$(dirname $(realpath -s $0))
+
+# Set paths for Dynare and test folder
+LOGFILE=$(mktemp --tmpdir dynare-master-check-XXXXXXXXXX.log)
+TMP_DIR=$(mktemp --directory --tmpdir dynare-master-XXXXXXXXXX)
+RESULTS_MATLAB=$TMP_DIR/dynare/tests/run_test_matlab_output.txt
+RESULTS_OCTAVE=$TMP_DIR/dynare/tests/run_test_octave_output.txt
+
+# Name of the file containing the hash of the HEAD commit considered in the previous run of the testsuite. 
+LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
 
 {
     cd $TMP_DIR
