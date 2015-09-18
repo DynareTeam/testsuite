@@ -18,14 +18,14 @@ MAILFROM=dynbot@dynare.org
 # Set the number of threads to be used by make (default value)
 THREADS=8
 
-# Change default values for the previous variables
-if [ -f  $SCRIPTPATH/configure.inc ]
-  then
-    source $SCRIPTPATH/configure.inc
-fi
-
 # Set path to testsuite's code.
 TESTSUITE_CODE_PATH=$(dirname $(realpath -s $0))
+
+# Change default values for the previous variables
+if [ -f  $TESTSUITE_CODE_PATH/configure.inc ]
+  then
+    source $TESTSUITE_CODE_PATH/configure.inc
+fi
 
 # Set paths for Dynare and test folder
 LOGFILE=$(mktemp --tmpdir dynare-master-check-XXXXXXXXXX.log)
