@@ -2,16 +2,23 @@
 
 set -ex
 
+# Set user related variables 
 USER=dynbot
 HOME=/home/$USER
 CODEDIR=$HOME/testsuite
+LAST_RAN_COMMIT=$CODEDIR/last-ran-testsuite-master.txt
+
+# Set paths for Dynare and tests
 LOGFILE=$(mktemp --tmpdir dynare-master-check-XXXXXXXXXX.log)
 TMP_DIR=$(mktemp --directory --tmpdir dynare-master-XXXXXXXXXX)
 RESULTS_MATLAB=$TMP_DIR/dynare/tests/run_test_matlab_output.txt
 RESULTS_OCTAVE=$TMP_DIR/dynare/tests/run_test_octave_output.txt
+
+# Set variables for matlab location
 MATLAB_VERSION=R2014a
 MATLAB_PATH=/usr/local/MATLAB
-LAST_RAN_COMMIT=$CODEDIR/last-ran-testsuite-master.txt
+
+# Set variables related to the publication of the results
 SERVER_PATH=kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master
 HTTP_PATH=http://www.dynare.org/testsuite/master
 
