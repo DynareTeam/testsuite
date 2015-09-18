@@ -18,6 +18,9 @@ MAILFROM=dynbot@dynare.org
 # Set the number of threads to be used by make (default value)
 THREADS=8
 
+# Set option for disabling Octave (empty by default)
+OCTAVE=
+
 # Set path to testsuite's code.
 TESTSUITE_CODE_PATH=$(dirname $(realpath -s $0))
 
@@ -48,7 +51,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
         echo $COMMIT > $LAST_RAN_COMMIT
 	# Compile binaries (preprocessor and mex files)
         autoreconf -i -s
-        ./configure --with-matlab=$MATLAB_PATH/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION
+        ./configure  --with-matlab=$MATLAB_PATH/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION $OCTAVE
         make -j$THREADS all
         # Don't fail at errors in the testsuite
         set +e
@@ -57,14 +60,20 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
 	cd $TMP_DIR/dynare/tests
 	# Copy the generated log files...
 	mkdir $TMP_DIR/dynare/tests.logs.m
-	mkdir $TMP_DIR/dynare/tests.logs.o
-	cp --parents `find -name \*.m.log` $TMP_DIR/dynare/tests.logs.m/
-	cp --parents `find -name \*.o.log` $TMP_DIR/dynare/tests.logs.o/
+        cp --parents `find -name \*.m.log` $TMP_DIR/dynare/tests.logs.m/
+        if [ -z $OCTAVE]
+           then
+	       mkdir $TMP_DIR/dynare/tests.logs.o
+               cp --parents `find -name \*.o.log` $TMP_DIR/dynare/tests.logs.o/
+        fi
 	$TMP_DIR/dynare
 	# ... and send them on kirikou.
 	rsync -az $TMP_DIR/dynare/tests.logs.m/* $SERVER_PATH/matlab
-	rsync -az $TMP_DIR/dynare/tests.logs.o/* $SERVER_PATH/octave
-	# Write and send footers
+        if [ -z $DISABLE_OCTAVE]
+           then
+               rsync -az $TMP_DIR/dynare/tests.logs.o/* $SERVER_PATH/octave
+        fi
+        # Write and send footers
 	{
 	    echo "# Matlab testsuite (master branch)"
 	    echo "Last commit [$(git log --pretty=format:'%h' -n 1)](https://github.com/DynareTeam/dynare/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
@@ -72,27 +81,36 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
 	pandoc header.md -o header.html
 	scp header.html $SERVER_PATH/matlab/header.html
 	rm header.*
-	{
-	    echo "# Octave testsuite (master branch)"
-	    echo "Last commit [$(git log --pretty=format:'%h' -n 1)](https://github.com/DynareTeam/dynare/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
-	} > header.md
-	pandoc header.md -o header.html
-	scp header.html $SERVER_PATH/octave/header.html
-	rm header.*
+        if [ -z $OCTAVE]
+           then
+	       {
+	           echo "# Octave testsuite (master branch)"
+	           echo "Last commit [$(git log --pretty=format:'%h' -n 1)](https://github.com/DynareTeam/dynare/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
+	       } > header.md
+	       pandoc header.md -o header.html
+	       scp header.html $SERVER_PATH/octave/header.html
+	       rm header.*
+        fi
 	# Write and send footers
 	{
 	    echo "Produced by $USER on $(hostname) $(date)."
 	} > footer.md
 	pandoc footer.md -o footer.html
 	scp footer.html $SERVER_PATH/matlab/footer.html
-	scp footer.html $SERVER_PATH/octave/footer.html
+        if [ -z $OCTAVE]
+           then
+	       scp footer.html $SERVER_PATH/octave/footer.html
+        fi
 	rm footer.*
 	cat $LOGFILE | $TESTSUITE_CODE_PATH/ansi2html.sh > footer.html
 	scp footer.html $SERVER_PATH/footer.html
 	rm footer.html
 	# Build archive containing all the logs
 	tar -jcvf matlablogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
-	tar -jcvf octavelogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
+        if [ -z $OCTAVE]
+           then
+	       tar -jcvf octavelogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
+        fi
 	scp *.tar.bz2 $SERVER_PATH
 	# Copy timing logs to kirikou
         ./make-timing-html-file.sh
@@ -109,7 +127,12 @@ else
         cd $TMP_DIR/dynare && git log -1 --pretty=oneline HEAD
         echo
         cat $RESULTS_MATLAB || echo -e "Dynare failed to compile or MATLAB testsuite failed to run\n"
-        cat $RESULTS_OCTAVE || echo -e "Dynare failed to compile or Octave testsuite failed to run\n"
+        if [ -z $OCTAVE]
+           then
+               cat $RESULTS_OCTAVE || echo -e "Dynare failed to compile or Octave testsuite failed to run\n"
+        else
+            echo "Did not run the testsuite for Octave\n"
+        fi
         echo "A full log can be found at" $HTTP_PATH
     } | mail -s "Status of testsuite in master branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
 fi
