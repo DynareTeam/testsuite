@@ -2,17 +2,17 @@
 
 set -ex
 
-# Set user related variables 
-USER=dynbot
-HOME=/home/$USER
-CODEDIR=$HOME/testsuite
-LAST_RAN_COMMIT=$CODEDIR/last-ran-testsuite-master.txt
+TESTSUITE_CODE_PATH=$(dirname $(realpath -s $0))
+LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
 
 # Set paths for Dynare and tests
 LOGFILE=$(mktemp --tmpdir dynare-master-check-XXXXXXXXXX.log)
 TMP_DIR=$(mktemp --directory --tmpdir dynare-master-XXXXXXXXXX)
 RESULTS_MATLAB=$TMP_DIR/dynare/tests/run_test_matlab_output.txt
 RESULTS_OCTAVE=$TMP_DIR/dynare/tests/run_test_octave_output.txt
+
+# Set user name
+USER=dynbot
 
 # Set variables for matlab location
 MATLAB_VERSION=R2014a
@@ -26,6 +26,9 @@ MAILFROM=dynbot@dynare.org
 
 # Set the number of threads to be used by make
 THREADS=8
+
+#
+
 
 {
     cd $TMP_DIR
@@ -78,7 +81,7 @@ THREADS=8
 	scp footer.html $SERVER_PATH/matlab/footer.html
 	scp footer.html $SERVER_PATH/octave/footer.html
 	rm footer.*
-	cat $LOGFILE | $CODEDIR/ansi2html.sh > footer.html
+	cat $LOGFILE | $TESTSUITE_CODE_PATH/ansi2html.sh > footer.html
 	scp footer.html $SERVER_PATH/footer.html
 	rm footer.html
 	# Build archive containing all the logs
