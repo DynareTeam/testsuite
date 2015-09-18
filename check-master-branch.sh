@@ -12,6 +12,8 @@ RESULTS_OCTAVE=$TMP_DIR/dynare/tests/run_test_octave_output.txt
 MATLAB_VERSION=R2014a
 MATLAB_PATH=/usr/local/MATLAB
 LAST_RAN_COMMIT=$CODEDIR/last-ran-testsuite-master.txt
+SERVER_PATH=kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master
+HTTP_PATH=http://www.dynare.org/testsuite/master
 
 {
     cd $TMP_DIR
@@ -39,38 +41,38 @@ LAST_RAN_COMMIT=$CODEDIR/last-ran-testsuite-master.txt
 	cp --parents `find -name \*.o.log` $TMP_DIR/dynare/tests.logs.o/
 	$TMP_DIR/dynare
 	# ... and send them on kirikou.
-	rsync -az $TMP_DIR/dynare/tests.logs.m/* kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/matlab
-	rsync -az $TMP_DIR/dynare/tests.logs.o/* kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/octave
+	rsync -az $TMP_DIR/dynare/tests.logs.m/* $SERVER_PATH/matlab
+	rsync -az $TMP_DIR/dynare/tests.logs.o/* $SERVER_PATH/octave
 	# Write and send footers
 	{
 	    echo "# Matlab testsuite (master branch)"
 	    echo "Last commit [$(git log --pretty=format:'%h' -n 1)](https://github.com/DynareTeam/dynare/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
 	} > header.md
 	pandoc header.md -o header.html
-	scp header.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/matlab/header.html
+	scp header.html $SERVER_PATH/matlab/header.html
 	rm header.*
 	{
 	    echo "# Octave testsuite (master branch)"
 	    echo "Last commit [$(git log --pretty=format:'%h' -n 1)](https://github.com/DynareTeam/dynare/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
 	} > header.md
 	pandoc header.md -o header.html
-	scp header.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/octave/header.html
+	scp header.html $SERVER_PATH/octave/header.html
 	rm header.*
 	# Write and send footers
 	{
 	    echo "Produced by $USER on $(hostname) $(date)."
 	} > footer.md
 	pandoc footer.md -o footer.html
-	scp footer.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/matlab/footer.html
-	scp footer.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/octave/footer.html
+	scp footer.html $SERVER_PATH/matlab/footer.html
+	scp footer.html $SERVER_PATH/octave/footer.html
 	rm footer.*
 	cat $LOGFILE | $CODEDIR/ansi2html.sh > footer.html
-	scp footer.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/footer.html
+	scp footer.html $SERVER_PATH/footer.html
 	rm footer.html
 	# Build archive containing all the logs
 	tar -jcvf matlablogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
 	tar -jcvf octavelogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
-	scp *.tar.bz2 kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/
+	scp *.tar.bz2 $SERVER_PATH
         set -e
     fi
 } >$LOGFILE 2>&1
@@ -84,7 +86,7 @@ else
         echo
         cat $RESULTS_MATLAB || echo -e "Dynare failed to compile or MATLAB testsuite failed to run\n"
         cat $RESULTS_OCTAVE || echo -e "Dynare failed to compile or Octave testsuite failed to run\n"
-        echo "A full log can be found at http://www.dynare.org/testsuite/master"
+        echo "A full log can be found at" $HTTP_PATH
     } | mail -s "Status of testsuite in master branch" dev@dynare.org -aFrom:"Dynare Robot <dynbot@dynare.org>"
 fi
 
