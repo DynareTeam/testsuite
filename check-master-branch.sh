@@ -21,6 +21,8 @@ MATLAB_PATH=/usr/local/MATLAB
 # Set variables related to the publication of the results
 SERVER_PATH=kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master
 HTTP_PATH=http://www.dynare.org/testsuite/master
+MAILTO=dev@dynare.org
+MAILFROM=dynbot@dynare.org
 
 {
     cd $TMP_DIR
@@ -94,7 +96,7 @@ else
         cat $RESULTS_MATLAB || echo -e "Dynare failed to compile or MATLAB testsuite failed to run\n"
         cat $RESULTS_OCTAVE || echo -e "Dynare failed to compile or Octave testsuite failed to run\n"
         echo "A full log can be found at" $HTTP_PATH
-    } | mail -s "Status of testsuite in master branch" dev@dynare.org -aFrom:"Dynare Robot <dynbot@dynare.org>"
+    } | mail -s "Status of testsuite in master branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
 fi
 
 #rm -rf $TMP_DIR
