@@ -10,6 +10,7 @@ TMP_DIR=$(mktemp --directory --tmpdir dynare-master-XXXXXXXXXX)
 RESULTS_MATLAB=$TMP_DIR/dynare/tests/run_test_matlab_output.txt
 RESULTS_OCTAVE=$TMP_DIR/dynare/tests/run_test_octave_output.txt
 MATLAB_VERSION=R2014a
+MATLAB_PATH=/usr/local/MATLAB
 LAST_RAN_COMMIT=$CODEDIR/last-ran-testsuite-master.txt
 
 {
@@ -24,7 +25,7 @@ LAST_RAN_COMMIT=$CODEDIR/last-ran-testsuite-master.txt
         echo $COMMIT > $LAST_RAN_COMMIT
 	# Compile binaries (preprocessor and mex files)
         autoreconf -i -s
-        ./configure --with-matlab=/usr/local/MATLAB/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION
+        ./configure --with-matlab=$MATLAB_PATH/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION
         make -j8 all
         # Don't fail at errors in the testsuite
         set +e
