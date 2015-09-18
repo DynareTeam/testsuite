@@ -24,6 +24,9 @@ HTTP_PATH=http://www.dynare.org/testsuite/master
 MAILTO=dev@dynare.org
 MAILFROM=dynbot@dynare.org
 
+# Set the number of threads to be used by make
+THREADS=8
+
 {
     cd $TMP_DIR
     git clone --depth 1 --recursive --branch master --single-branch git@github.com:DynareTeam/dynare.git
@@ -37,11 +40,11 @@ MAILFROM=dynbot@dynare.org
 	# Compile binaries (preprocessor and mex files)
         autoreconf -i -s
         ./configure --with-matlab=$MATLAB_PATH/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION
-        make -j8 all
+        make -j$THREADS all
         # Don't fail at errors in the testsuite
         set +e
 	# Run tests (matlab and octave)
-        make -C tests -j8 check
+        make -C tests -j$THREADS check
 	cd $TMP_DIR/dynare/tests
 	# Copy the generated log files...
 	mkdir $TMP_DIR/dynare/tests.logs.m
