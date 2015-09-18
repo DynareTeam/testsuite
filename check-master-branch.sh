@@ -2,13 +2,15 @@
 
 set -ex
 
-BASEDIR=$(pwd)
+USER=dynbot
+HOME=/home/$USER
+CODEDIR=$HOME/testsuite
 LOGFILE=$(mktemp --tmpdir dynare-master-check-XXXXXXXXXX.log)
 TMP_DIR=$(mktemp --directory --tmpdir dynare-master-XXXXXXXXXX)
 RESULTS_MATLAB=$TMP_DIR/dynare/tests/run_test_matlab_output.txt
 RESULTS_OCTAVE=$TMP_DIR/dynare/tests/run_test_octave_output.txt
 MATLAB_VERSION=R2014a
-LAST_RAN_COMMIT=/home/dynbot/testsuite/last-ran-testsuite-master.txt
+LAST_RAN_COMMIT=$CODEDIR/last-ran-testsuite-master.txt
 
 {
     cd $TMP_DIR
@@ -61,7 +63,7 @@ LAST_RAN_COMMIT=/home/dynbot/testsuite/last-ran-testsuite-master.txt
 	scp footer.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/matlab/footer.html
 	scp footer.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/octave/footer.html
 	rm footer.*
-	cat $LOGFILE | $BASEDIR/ansi2html.sh > footer.html
+	cat $LOGFILE | $CODEDIR/ansi2html.sh > footer.html
 	scp footer.html kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master/footer.html
 	rm footer.html
 	# Build archive containing all the logs
