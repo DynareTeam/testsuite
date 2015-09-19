@@ -61,7 +61,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
 	# Copy the generated log files...
 	mkdir $TMP_DIR/dynare/tests.logs.m
         cp --parents `find -name \*.m.log` $TMP_DIR/dynare/tests.logs.m/
-        if [ -z $OCTAVE]
+        if [ -z $OCTAVE ]
            then
 	       mkdir $TMP_DIR/dynare/tests.logs.o
                cp --parents `find -name \*.o.log` $TMP_DIR/dynare/tests.logs.o/
@@ -69,7 +69,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
 	$TMP_DIR/dynare
 	# ... and send them on kirikou.
 	rsync -az $TMP_DIR/dynare/tests.logs.m/* $SERVER_PATH/matlab
-        if [ -z $DISABLE_OCTAVE]
+        if [ -z $OCTAVE ]
            then
                rsync -az $TMP_DIR/dynare/tests.logs.o/* $SERVER_PATH/octave
         fi
@@ -81,7 +81,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
 	pandoc header.md -o header.html
 	scp header.html $SERVER_PATH/matlab/header.html
 	rm header.*
-        if [ -z $OCTAVE]
+        if [ -z $OCTAVE ]
            then
 	       {
 	           echo "# Octave testsuite (master branch)"
@@ -97,7 +97,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
 	} > footer.md
 	pandoc footer.md -o footer.html
 	scp footer.html $SERVER_PATH/matlab/footer.html
-        if [ -z $OCTAVE]
+        if [ -z $OCTAVE ]
            then
 	       scp footer.html $SERVER_PATH/octave/footer.html
         fi
@@ -107,7 +107,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
 	rm footer.html
 	# Build archive containing all the logs
 	tar -jcvf matlablogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
-        if [ -z $OCTAVE]
+        if [ -z $OCTAVE ]
            then
 	       tar -jcvf octavelogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
         fi
@@ -127,7 +127,7 @@ else
         cd $TMP_DIR/dynare && git log -1 --pretty=oneline HEAD
         echo
         cat $RESULTS_MATLAB || echo -e "Dynare failed to compile or MATLAB testsuite failed to run\n"
-        if [ -z $OCTAVE]
+        if [ -z $OCTAVE ]
            then
                cat $RESULTS_OCTAVE || echo -e "Dynare failed to compile or Octave testsuite failed to run\n"
         else
