@@ -15,6 +15,13 @@ HTTP_PATH=http://www.dynare.org/testsuite/master
 MAILTO=dev@dynare.org
 MAILFROM=dynbot@dynare.org
 
+# Set branch name (default value)
+GIT_BRANCH=master
+ 
+# Set git repository (default value)
+GIT_REPOSITORY_SSH=git@github.com:DynareTeam/dynare.git
+GIT_REPOSITORY_HTTP=https://github.com/DynareTeam/dynare
+
 # Set the number of threads to be used by make (default value)
 THREADS=8
 
@@ -38,7 +45,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
 
 {
     cd $TMP_DIR
-    git clone --depth 1 --recursive --branch master --single-branch git@github.com:DynareTeam/dynare.git
+    git clone --depth 1 --recursive --branch $GIT_BRANCH --single-branch $GIT_REPOSITORY_SSH
     cd dynare
     COMMIT=$(git log -1 --pretty=oneline HEAD)
     if [[ -f $LAST_RAN_COMMIT && "$(cat $LAST_RAN_COMMIT)" == "$(echo $COMMIT)" ]]; then
@@ -67,14 +74,14 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
 	# Write and send footers
 	{
 	    echo "# Matlab testsuite (master branch)"
-	    echo "Last commit [$(git log --pretty=format:'%h' -n 1)](https://github.com/DynareTeam/dynare/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
+	    echo "Last commit [$(git log --pretty=format:'%h' -n 1)]($GIT_REPOSITORY_HTTP/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
 	} > header.md
 	pandoc header.md -o header.html
 	scp header.html $SERVER_PATH/matlab/header.html
 	rm header.*
 	{
 	    echo "# Octave testsuite (master branch)"
-	    echo "Last commit [$(git log --pretty=format:'%h' -n 1)](https://github.com/DynareTeam/dynare/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
+	    echo "Last commit [$(git log --pretty=format:'%h' -n 1)]($GIT_REPOSITORY_HTTP/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
 	} > header.md
 	pandoc header.md -o header.html
 	scp header.html $SERVER_PATH/octave/header.html
