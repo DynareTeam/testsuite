@@ -33,8 +33,15 @@ fi
 # Set paths for Dynare and test folder
 LOGFILE=$(mktemp --tmpdir dynare-master-check-XXXXXXXXXX.log)
 TMP_DIR=$(mktemp --directory --tmpdir dynare-master-XXXXXXXXXX)
+
+# Define the name of the txt file where a testsuite summary will be written (matlab)
 RESULTS_MATLAB=$TMP_DIR/dynare/tests/run_test_matlab_output.txt
-RESULTS_OCTAVE=$TMP_DIR/dynare/tests/run_test_octave_output.txt
+
+# Define the name of the txt file where a testsuite summary will be written (matlab)
+if [ -z $OCTAVE ]
+    then
+        RESULTS_OCTAVE=$TMP_DIR/dynare/tests/run_test_octave_output.txt
+fi
 
 # Name of the file containing the hash of the HEAD commit considered in the previous run of the testsuite. 
 LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
