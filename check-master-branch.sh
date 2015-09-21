@@ -148,5 +148,5 @@ else
             echo "Did not run the testsuite for Octave\n"
         fi
         echo "A full log can be found at" $HTTP_PATH
-    } | mail -s "Status of testsuite in" $GIT_BRANCH "branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
+    } | mail -s "Status of testsuite in $GIT_BRANCH branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
 fi
