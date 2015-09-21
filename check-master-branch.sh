@@ -38,8 +38,8 @@ if [ -f  $TESTSUITE_CODE_PATH/configure.inc ]
 fi
 
 # Set paths for Dynare and test folder
-LOGFILE=$(mktemp --tmpdir dynare-master-check-XXXXXXXXXX.log)
-TMP_DIR=$(mktemp --directory --tmpdir dynare-master-XXXXXXXXXX)
+LOGFILE=$(mktemp --tmpdir dynare-$GIT_BRANCH-check-XXXXXXXXXX.log)
+TMP_DIR=$(mktemp --directory --tmpdir dynare-$GIT_BRANCH-XXXXXXXXXX)
 
 # Define the name of the txt file where a testsuite summary will be written (matlab)
 RESULTS_MATLAB=$TMP_DIR/dynare/tests/run_test_matlab_output.txt
