@@ -9,18 +9,18 @@ USER=dynbot
 MATLAB_VERSION=R2014a
 MATLAB_PATH=/usr/local/MATLAB
 
-# Set variables related to the publication of the results (default values)
-SERVER_PATH=kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/master
-HTTP_PATH=http://www.dynare.org/testsuite/master
-MAILTO=dev@dynare.org
-MAILFROM=dynbot@dynare.org
-
 # Set branch name (default value)
 GIT_BRANCH=master
  
 # Set git repository (default value)
 GIT_REPOSITORY_SSH=git@github.com:DynareTeam/dynare.git
 GIT_REPOSITORY_HTTP=https://github.com/DynareTeam/dynare
+
+# Set variables related to the publication of the results (default values)
+SERVER_PATH=kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/$GIT_BRANCH
+HTTP_PATH=http://www.dynare.org/testsuite/$GIT_BRANCH
+MAILTO=dev@dynare.org
+MAILFROM=dynbot@dynare.org
 
 # Set the number of threads to be used by make (default value)
 THREADS=8
@@ -51,7 +51,7 @@ if [ -z $OCTAVE ]
 fi
 
 # Name of the file containing the hash of the HEAD commit considered in the previous run of the testsuite. 
-LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
+LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
 
 {
     cd $TMP_DIR
@@ -89,7 +89,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
         fi
         # Write and send footers
 	{
-	    echo "# Matlab testsuite (master branch)"
+	    echo "# Matlab testsuite ("$GIT_BRANCH "branch)"
 	    echo "Last commit [$(git log --pretty=format:'%h' -n 1)]($GIT_REPOSITORY_HTTP/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
 	} > header.md
 	pandoc header.md -o header.html
@@ -98,7 +98,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-master.txt
         if [ -z $OCTAVE ]
            then
 	       {
-	           echo "# Octave testsuite (master branch)"
+	           echo "# Octave testsuite ("$GIT_BRANCH "branch)"
 	           echo "Last commit [$(git log --pretty=format:'%h' -n 1)]($GIT_REPOSITORY_HTTP/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
 	       } > header.md
 	       pandoc header.md -o header.html
@@ -148,7 +148,5 @@ else
             echo "Did not run the testsuite for Octave\n"
         fi
         echo "A full log can be found at" $HTTP_PATH
-    } | mail -s "Status of testsuite in master branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
+    } | mail -s "Status of testsuite in" $GIT_BRANCH "branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
 fi
-
-#rm -rf $TMP_DIR
