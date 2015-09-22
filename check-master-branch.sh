@@ -84,10 +84,12 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
         fi
 	$TMP_DIR/dynare
 	# ... and send them on kirikou.
+	ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/matlab
 	ssh $REMOTE_NAME rm -rf $REMOTE_PATH/matlab/*
 	rsync -az $TMP_DIR/dynare/tests.logs.m/* $SERVER_PATH/matlab
         if [ -z $OCTAVE ]
             then
+		ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/octave
 		ssh $REMOTE_NAME rm -rf $REMOTE_PATH/octave/*
 		rsync -az $TMP_DIR/dynare/tests.logs.o/* $SERVER_PATH/octave
         fi
