@@ -145,7 +145,7 @@ else
            then
                cat $RESULTS_OCTAVE || echo -e "Dynare failed to compile or Octave testsuite failed to run\n"
         else
-            echo "Did not run the testsuite for Octave\n"
+            echo "Did not run the testsuite for Octave"
         fi
         echo "A full log can be found at" $HTTP_PATH
     } | mail -s "Status of testsuite in $GIT_BRANCH branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
