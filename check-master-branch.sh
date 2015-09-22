@@ -126,8 +126,8 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
 	       tar -jcvf octavelogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
         fi
 	scp *.tar.bz2 $SERVER_PATH
-	# Copy timing logs to kirikou
-        ./make-timing-html-file.sh
+	# Update timing, create index, copy to kirikou
+        $TESTSUITE_CODE_PATH/timing-and-html-file.sh $TMP_DIR/dynare/tests
         scp $TESTSUITE_CODE_PATH/../testSuiteTiming/* $SERVER_PATH/timing/
         set -e
     fi

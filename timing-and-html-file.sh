@@ -3,21 +3,29 @@
 TESTSUITE_CODE_PATH=$(dirname $(realpath -s $0))
 CSVPATH=$(realpath $TESTSUITE_CODE_PATH/../testSuiteTiming)
 HTML=$CSVPATH/index.html
-
 ORIGPATH=$PWD
+DATE=`date +%Y%m%d`
 
 if [ ! -d $CSVPATH ]
 then
     mkdir $CSVPATH
 fi
-    
+
+# Write timing from .trs files to .csv files from previous test runs
+cd $1
+TRS_FILES=`find . -regex ".*\.\(trs\)" | sed 's/\.\///'`
+for file in $TRS_FILES; do
+    time=`grep cputime $file | cut -d: -f3 | sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//'`
+    csvfile=`echo $file | sed 's/\//-/g' | sed 's/\.trs$/\.csv/g'`
+    if [ ! -f $CSVPATH/$csvfile ]; then
+        name=`echo $file | sed 's/\.m\.trs$/.mod/g' | sed 's/\.o\.trs$/.mod/g'`
+        echo "DATE,$name" > $CSVPATH/$csvfile
+    fi
+    echo $DATE,$time >> $CSVPATH/$csvfile
+done
+
+# Create html file for graphs
 cd $CSVPATH
-
-if [ ! -f $HTML]
-then
-    touch $HTML
-fi
-
 echo "<html>"     > $HTML
 echo "<head>"    >> $HTML
 echo "<script type=\"text/javascript\" src=\"http://cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.0/dygraph-combined.js\"></script>"    >> $HTML
