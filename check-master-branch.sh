@@ -17,7 +17,9 @@ GIT_REPOSITORY_SSH=git@github.com:DynareTeam/dynare.git
 GIT_REPOSITORY_HTTP=https://github.com/DynareTeam/dynare
 
 # Set variables related to the publication of the results (default values)
-SERVER_PATH=kirikou.cepremap.org:/srv/d_kirikou/www.dynare.org/testsuite/$GIT_BRANCH
+REMOTE_NAME=kirikou.cepremap.org
+REMOTE_PATH=/srv/d_kirikou/www.dynare.org/testsuite/$GIT_BRANCH
+SERVER_PATH=$REMOTE_NAME:$REMOTE_PATH
 HTTP_PATH=http://www.dynare.org/testsuite/$GIT_BRANCH
 MAILTO=dev@dynare.org
 MAILFROM=dynbot@dynare.org
@@ -82,10 +84,12 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
         fi
 	$TMP_DIR/dynare
 	# ... and send them on kirikou.
+	ssh $REMOTE_NAME rm -rf $REMOTE_PATH/matlab/*
 	rsync -az $TMP_DIR/dynare/tests.logs.m/* $SERVER_PATH/matlab
         if [ -z $OCTAVE ]
-           then
-               rsync -az $TMP_DIR/dynare/tests.logs.o/* $SERVER_PATH/octave
+            then
+		ssh $REMOTE_NAME rm -rf $REMOTE_PATH/octave/*
+		rsync -az $TMP_DIR/dynare/tests.logs.o/* $SERVER_PATH/octave
         fi
         # Write and send footers
 	{
