@@ -82,7 +82,6 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
 	       mkdir $TMP_DIR/dynare/tests.logs.o
                cp --parents `find -name \*.o.log` $TMP_DIR/dynare/tests.logs.o/
         fi
-	$TMP_DIR/dynare
 	# ... and send them on kirikou.
 	ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/matlab
 	ssh $REMOTE_NAME rm -rf $REMOTE_PATH/matlab/*
