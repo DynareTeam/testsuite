@@ -2,34 +2,6 @@
 
 set -ex
 
-# Set user name (default value)
-USER=dynbot
-
-# Set variables for matlab location (default values)
-MATLAB_VERSION=R2014a
-MATLAB_PATH=/usr/local/MATLAB
-
-# Set branch name (default value)
-GIT_BRANCH=master
- 
-# Set git repository (default value)
-GIT_REPOSITORY_SSH=git@github.com:DynareTeam/dynare.git
-GIT_REPOSITORY_HTTP=https://github.com/DynareTeam/dynare
-
-# Set variables related to the publication of the results (default values)
-REMOTE_NAME=kirikou.cepremap.org
-REMOTE_PATH=/srv/d_kirikou/www.dynare.org/testsuite/$GIT_BRANCH
-SERVER_PATH=$REMOTE_NAME:$REMOTE_PATH
-HTTP_PATH=http://www.dynare.org/testsuite/$GIT_BRANCH
-MAILTO=dev@dynare.org
-MAILFROM=dynbot@dynare.org
-
-# Set the number of threads to be used by make (default value)
-THREADS=8
-
-# Set option for disabling Octave (empty by default)
-OCTAVE=
-
 # Set path to testsuite's code.
 TESTSUITE_CODE_PATH=$(dirname $(realpath -s $0))
 
