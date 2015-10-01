@@ -33,6 +33,9 @@ OCTAVE=
 # Set path to testsuite's code.
 TESTSUITE_CODE_PATH=$(dirname $(realpath -s $0))
 
+# Set path to testsuite's timings.
+TESTSUITE_TIMING_PATH=$(realpath -s $TESTSUITE_CODE_PATH/../testSuiteTiming)
+
 # Change default values for the previous variables
 if [ -f  $TESTSUITE_CODE_PATH/configure.inc ]
   then
@@ -137,10 +140,10 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
         fi
 	scp *.tar.bz2 $SERVER_PATH
 	# Update timing, create index, copy to kirikou
-	ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/timing/
+	ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/timing
 	ssh $REMOTE_NAME rm -rf $REMOTE_PATH/timing/*
         $TESTSUITE_CODE_PATH/timing-and-html-file.sh $TMP_DIR/dynare/tests
-        scp $TESTSUITE_CODE_PATH/../testSuiteTiming/* $SERVER_PATH/timing/
+	rsync -az $TESTSUITE_TIMING_PATH/* $SERVER_PATH/timing
         set -e
     fi
 } >$LOGFILE 2>&1
@@ -151,7 +154,7 @@ else
     chmod +r $LOGFILE
     {
         cd $TMP_DIR/dynare && git log -1 --pretty=oneline HEAD
-        echo
+        #echo
         cat $RESULTS_MATLAB || echo -e "Dynare failed to compile or MATLAB testsuite failed to run\n"
         if [ -z $OCTAVE ]
            then
