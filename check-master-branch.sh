@@ -72,13 +72,13 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
         # Don't fail at errors in the testsuite
         set +e
 	# Run tests (matlab and octave)
+	cd $TMP_DIR/dynare/tests
 	if [ -z $OCTAVE ]
 	    then
-		make -C tests -j$THREADS check
+		make -j$THREADS check
 	else
-            make -C tests -j$THREADS check-matlab
+            make -j$THREADS check-matlab
 	fi
-	cd $TMP_DIR/dynare/tests
 	# Copy the generated log files...
 	mkdir $TMP_DIR/dynare/tests.logs.m
         cp --parents `find -name \*.m.log` $TMP_DIR/dynare/tests.logs.m/
