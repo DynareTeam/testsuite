@@ -1,6 +1,9 @@
 # Set the name of the user running the testsuite
 USER=toto
 
+# Run the testsuite with Matlab.
+MATLAB=true
+
 # Set variables for matlab location ($USER has to be allowed to run Matlab).
 MATLAB_VERSION=R2014a
 MATLAB_PATH=/usr/local/MATLAB
@@ -23,5 +26,5 @@ MAILFROM=toto@blagues.fr
 # Set the number of threads to be used by make (default value)
 THREADS=128
 
-# If empty will run the testsuite with Octave also. Set equal to --disable-octave otherwise.
-OCTAVE=
+# Run the testsuite with octave.
+OCTAVE=false
