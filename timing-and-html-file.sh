@@ -13,15 +13,16 @@ fi
 
 # Write timing from .trs files to .csv files from previous test runs
 cd $1
+SHA=`git rev-parse HEAD`
 TRS_FILES=`find . -regex ".*\.\(trs\)" | sed 's/\.\///'`
 for file in $TRS_FILES; do
     time=`grep cputime $file | cut -d: -f3 | sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//'`
     csvfile=`echo $file | sed 's/\//-/g' | sed 's/\.trs$/\.csv/g'`
     if [ ! -f $CSVPATH/$csvfile ]; then
         name=`echo $file | sed 's/\.m\.trs$/.mod/g' | sed 's/\.o\.trs$/.mod/g'`
-        echo "DATE,$name" > $CSVPATH/$csvfile
+        echo "DATE,$name,SHA" > $CSVPATH/$csvfile
     fi
-    echo $DATE,$time >> $CSVPATH/$csvfile
+    echo $DATE,$time,$SHA >> $CSVPATH/$csvfile
 done
 
 # Create html file for graphs
@@ -54,3 +55,4 @@ echo "</body>"    >> $HTML
 echo "</html>"    >> $HTML
 
 cd $ORIGPATH
+
