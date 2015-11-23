@@ -136,7 +136,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
 	ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/timing
 	ssh $REMOTE_NAME rm -rf $REMOTE_PATH/timing/*
         $TESTSUITE_CODE_PATH/timing-and-html-file.sh $TMP_DIR/dynare/tests
-	rsync -az $TESTSUITE_TIMING_PATH/* $SERVER_PATH/timing
+	scp $TESTSUITE_TIMING_PATH/index.html $SERVER_PATH/timing/index.html
         set -e
     fi
 } >$LOGFILE 2>&1
