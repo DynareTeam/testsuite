@@ -34,6 +34,6 @@ for file in *.csv; do
         echo $DATE,"NaN",$SHA >> $file
     fi
 done
-python $TESTSUITE_CODE_PATH/timing.py
+python $TESTSUITE_CODE_PATH/make_timing_graphs.py
 cd $ORIGPATH
 
