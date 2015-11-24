@@ -28,6 +28,12 @@ done
 
 # Create html file for graphs
 cd $CSVPATH
+for file in *.csv; do
+    filedate=`awk '/./{line=$0} END{print line}' $file | cut -d ',' -f 1 | tr -d '[[:space:]]'`
+    if [ $DATE -ne $filedate ]; then
+        echo $DATE,"NaN",$SHA >> $file
+    fi
+done
 python $TESTSUITE_CODE_PATH/timing.py
 cd $ORIGPATH
 
