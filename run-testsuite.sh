@@ -37,7 +37,7 @@ if ! $MATLAB && ! $OCTAVE ; then
     exit
 fi
 
-# Name of the file containing the hash of the HEAD commit considered in the previous run of the testsuite. 
+# Name of the file containing the hash of the HEAD commit considered in the previous run of the testsuite.
 LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
 
 {
@@ -50,93 +50,93 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
     else
         RUN_TESTSUITE=1
         echo $COMMIT > $LAST_RAN_COMMIT
-	# Compile binaries (preprocessor and mex files)
+        # Compile binaries (preprocessor and mex files)
         autoreconf -i -s
-	if $MATLAB && $OCTAVE ; then
+        if $MATLAB && $OCTAVE ; then
             ./configure  --with-matlab=$MATLAB_PATH/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION ;
-	elif $MATLAB && ! $OCTAVE ; then
-	    ./configure  --with-matlab=$MATLAB_PATH/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION --disable-octave ;
-	else
-	    ./configure ;
-	fi  
+        elif $MATLAB && ! $OCTAVE ; then
+            ./configure  --with-matlab=$MATLAB_PATH/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION --disable-octave ;
+        else
+            ./configure ;
+        fi
         make -j$THREADS all
         # Don't fail at errors in the testsuite
         set +e
-	# Run tests (matlab and octave)
-	cd $TMP_DIR/dynare/tests
-	if $OCTAVE && $MATLAB ; then
-	    make -j$THREADS check
-	elif ! $OCTAVE ; then
+        # Run tests (matlab and octave)
+        cd $TMP_DIR/dynare/tests
+        if $OCTAVE && $MATLAB ; then
+            make -j$THREADS check
+        elif ! $OCTAVE ; then
             make -j$THREADS check-matlab
-	elif ! $MATLAB ; then
-	    make -j$THREADS check-octave
-	fi
-	# Copy the generated log files...
-	if $MATLAB ; then
-	    mkdir $TMP_DIR/dynare/tests.logs.m
+        elif ! $MATLAB ; then
+            make -j$THREADS check-octave
+        fi
+        # Copy the generated log files...
+        if $MATLAB ; then
+            mkdir $TMP_DIR/dynare/tests.logs.m
             cp --parents `find -name \*.m.log` $TMP_DIR/dynare/tests.logs.m/
-	fi
+        fi
         if $OCTAVE ; then
-	    mkdir $TMP_DIR/dynare/tests.logs.o
+            mkdir $TMP_DIR/dynare/tests.logs.o
             cp --parents `find -name \*.o.log` $TMP_DIR/dynare/tests.logs.o/
         fi
-	# ... and send them on kirikou.
-	if $MATLAB ; then
-	    ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/matlab
-	    ssh $REMOTE_NAME rm -rf $REMOTE_PATH/matlab/*
-	    rsync -az $TMP_DIR/dynare/tests.logs.m/* $SERVER_PATH/matlab
-	fi
+        # ... and send them on kirikou.
+        if $MATLAB ; then
+            ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/matlab
+            ssh $REMOTE_NAME rm -rf $REMOTE_PATH/matlab/*
+            rsync -az $TMP_DIR/dynare/tests.logs.m/* $SERVER_PATH/matlab
+        fi
         if $OCTAVE ; then
-	    ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/octave
-	    ssh $REMOTE_NAME rm -rf $REMOTE_PATH/octave/*
-	    rsync -az $TMP_DIR/dynare/tests.logs.o/* $SERVER_PATH/octave
+            ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/octave
+            ssh $REMOTE_NAME rm -rf $REMOTE_PATH/octave/*
+            rsync -az $TMP_DIR/dynare/tests.logs.o/* $SERVER_PATH/octave
         fi
         # Write and send footers
-	if $MATLAB ; then
-	    {
-		echo "# Matlab testsuite ("$GIT_BRANCH "branch)"
-		echo "Last commit [$(git log --pretty=format:'%h' -n 1)]($GIT_REPOSITORY_HTTP/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
-	    } > header.md
-	    pandoc header.md -o header.html
-	    scp header.html $SERVER_PATH/matlab/header.html
-	    rm header.*
-	fi
-        if $OCTAVE ; then
-	    {
-	        echo "# Octave testsuite ("$GIT_BRANCH "branch)"
-	        echo "Last commit [$(git log --pretty=format:'%h' -n 1)]($GIT_REPOSITORY_HTTP/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
-	    } > header.md
-	    pandoc header.md -o header.html
-	    scp header.html $SERVER_PATH/octave/header.html
-	    rm header.*
+        if $MATLAB ; then
+            {
+                echo "# Matlab testsuite ("$GIT_BRANCH "branch)"
+                echo "Last commit [$(git log --pretty=format:'%h' -n 1)]($GIT_REPOSITORY_HTTP/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
+            } > header.md
+            pandoc header.md -o header.html
+            scp header.html $SERVER_PATH/matlab/header.html
+            rm header.*
         fi
-	# Write and send footers
-	echo "\n\nProduced by $USER on $(hostname) $(date)." > footer-date
-	cat $LOGFILE footer-date > footer
-	cat footer | $TESTSUITE_CODE_PATH/ansi2html.sh > footer.html
-	if $OCTAVE && $MATLAB ; then
-	    scp footer.html $SERVER_PATH/footer.html ;
-	elif $OCTAVE ; then
-	    scp footer.html $SERVER_PATH/octave/footer.html ;
-	elif $MATLAB ; then
-	    scp footer.html $SERVER_PATH/matlab/footer.html ;
-	else
-	    echo "I should not be on this branch..."
-	    exit
-	fi
-	# Build archive containing all the logs
-	if $MATLAB ; then
-	    tar -jcvf matlablogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
-	fi
         if $OCTAVE ; then
-	    tar -jcvf octavelogs.tar.bz2 $TMP_DIR/dynare/tests.logs.o
+            {
+                echo "# Octave testsuite ("$GIT_BRANCH "branch)"
+                echo "Last commit [$(git log --pretty=format:'%h' -n 1)]($GIT_REPOSITORY_HTTP/commit/$(git log --pretty=format:'%H' -n 1)) by $(git log --pretty=format:'%an' -n 1) [$(git log --pretty=format:'%ad' -n 1)]"
+            } > header.md
+            pandoc header.md -o header.html
+            scp header.html $SERVER_PATH/octave/header.html
+            rm header.*
         fi
-	scp *.tar.bz2 $SERVER_PATH
-	# Update timing, create index, copy to kirikou
+        # Write and send footers
+        echo "\n\nProduced by $USER on $(hostname) $(date)." > footer-date
+        cat $LOGFILE footer-date > footer
+        cat footer | $TESTSUITE_CODE_PATH/ansi2html.sh > footer.html
+        if $OCTAVE && $MATLAB ; then
+            scp footer.html $SERVER_PATH/footer.html ;
+        elif $OCTAVE ; then
+            scp footer.html $SERVER_PATH/octave/footer.html ;
+        elif $MATLAB ; then
+            scp footer.html $SERVER_PATH/matlab/footer.html ;
+        else
+            echo "I should not be on this branch..."
+            exit
+        fi
+        # Build archive containing all the logs
+        if $MATLAB ; then
+            tar -jcvf matlablogs.tar.bz2 $TMP_DIR/dynare/tests.logs.m
+        fi
+        if $OCTAVE ; then
+            tar -jcvf octavelogs.tar.bz2 $TMP_DIR/dynare/tests.logs.o
+        fi
+        scp *.tar.bz2 $SERVER_PATH
+        # Update timing, create index, copy to kirikou
         $TESTSUITE_CODE_PATH/timing-and-html-file.sh $TMP_DIR/dynare/tests
-	ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/timing
-	ssh $REMOTE_NAME rm -rf $REMOTE_PATH/timing/*
-	scp $TESTSUITE_TIMING_PATH/index.html $SERVER_PATH/timing/index.html
+        ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/timing
+        ssh $REMOTE_NAME rm -rf $REMOTE_PATH/timing/*
+        scp $TESTSUITE_TIMING_PATH/index.html $SERVER_PATH/timing/index.html
         set -e
     fi
 } >$LOGFILE 2>&1
@@ -149,18 +149,18 @@ else
         cd $TMP_DIR/dynare && git log -1 --pretty=oneline HEAD
         if $MATLAB ; then
             cat $RESULTS_MATLAB || echo -e "Dynare failed to compile or MATLAB testsuite failed to run\n"
-	fi
+        fi
         if $OCTAVE ; then
             cat $RESULTS_OCTAVE || echo -e "Dynare failed to compile or Octave testsuite failed to run\n"
         fi
-	if $MATLAB && $OCTAVE ; then
+        if $MATLAB && $OCTAVE ; then
             echo "A full log can be found at $HTTP_PATH"
-	fi
-	if $MATLAB && ! $OCTAVE ; then
-	    echo "A full log can be found at $HTTP_PATH/matlab"
-	fi
-	if $OCTAVE && ! $MATLAB ; then
-	    echo "A full log can be found at $HTTP_PATH/octave"
-	fi
+        fi
+        if $MATLAB && ! $OCTAVE ; then
+            echo "A full log can be found at $HTTP_PATH/matlab"
+        fi
+        if $OCTAVE && ! $MATLAB ; then
+            echo "A full log can be found at $HTTP_PATH/octave"
+        fi
     } | mail -s "Status of testsuite in $GIT_BRANCH branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
 fi
