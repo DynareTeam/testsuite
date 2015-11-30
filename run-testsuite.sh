@@ -133,9 +133,9 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
         fi
 	scp *.tar.bz2 $SERVER_PATH
 	# Update timing, create index, copy to kirikou
+        $TESTSUITE_CODE_PATH/timing-and-html-file.sh $TMP_DIR/dynare/tests
 	ssh $REMOTE_NAME mkdir -p $REMOTE_PATH/timing
 	ssh $REMOTE_NAME rm -rf $REMOTE_PATH/timing/*
-        $TESTSUITE_CODE_PATH/timing-and-html-file.sh $TMP_DIR/dynare/tests
 	scp $TESTSUITE_TIMING_PATH/index.html $SERVER_PATH/timing/index.html
         set -e
     fi
