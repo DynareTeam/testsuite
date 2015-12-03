@@ -11,7 +11,7 @@ logging.basicConfig()
 # Set vars
 octavecolor="#CC6633"
 matlabcolor="#3366CC"
-output_file("index.html")
+output_file("timing.html")
 line_width=2
 circle_size=10
 opacity=0.7
