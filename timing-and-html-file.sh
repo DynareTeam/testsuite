@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ex
+set -evx
 
 ORIGPATH=$PWD
 DATE=`date +%Y%m%d`
@@ -32,7 +32,7 @@ for file in $TRS_FILES; do
     echo $DATE,$time,$SHA >> $TESTSUITE_TIMING_PATH/$path/$csvfile
 done
 
-# Create html file for graphs
+# If csv file exists, but test didn't run, insert NaN
 CSVFILES=`find $TESTSUITE_TIMING_PATH -name "*.csv"`
 echo $CSVFILES
 for file in $CSVFILES; do
@@ -43,4 +43,6 @@ for file in $CSVFILES; do
     fi
 done
 
-find $TESTSUITE_TIMING_PATH -type d -exec sh -c '(cd {} && python $TESTSUITE_CODE_PATH/make_timing_graphs.py)' ';'
+# Create html file for graphs
+echo "Creating .html timing files...."
+find $TESTSUITE_TIMING_PATH -type d -exec sh -c "set -x && cd {} && python --version && python $TESTSUITE_CODE_PATH/make_timing_graphs.py" ';'
