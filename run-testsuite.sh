@@ -53,11 +53,19 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
         # Compile binaries (preprocessor and mex files)
         autoreconf -i -s
         if $MATLAB && $OCTAVE ; then
-            ./configure  --with-matlab=$MATLAB_PATH/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION ;
+	    if [[ -v OCTAVE_PATH ]] ; then
+		./configure  --with-matlab=$MATLAB_PATH/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION --with-octave=$OCTAVE_PATH;
+	    else
+		./configure  --with-matlab=$MATLAB_PATH/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION ;
+	    fi
         elif $MATLAB && ! $OCTAVE ; then
             ./configure  --with-matlab=$MATLAB_PATH/$MATLAB_VERSION MATLAB_VERSION=$MATLAB_VERSION --disable-octave ;
         else
-            ./configure ;
+	    if [[ -v OCTAVE_PATH ]] ; then
+		./configure --with-octave=$OCTAVE_PATH ;
+	    else
+		./configure
+	    fi
         fi
         make -j$THREADS all
         # Don't fail at errors in the testsuite
