@@ -10,6 +10,9 @@ TESTSUITE_CODE_PATH=$(dirname $(realpath -s $0))
 # Set path to testsuite's timings.
 TESTSUITE_TIMING_PATH=$(realpath -s $TESTSUITE_CODE_PATH/../testSuiteTiming)
 
+# Set a default value for the number of threads
+THREADS=1
+
 # Change default values for the previous variables
 if [ -f  $TESTSUITE_CODE_PATH/configure.inc ]
   then

@@ -27,7 +27,7 @@ HTTP_PATH=http://blagues.fr/testsuite/$GIT_BRANCH
 MAILTO=dev@blagues.fr
 MAILFROM=toto@blagues.fr
 
-## Set the number of threads to be used by make (default value)
+## Set the number of threads to be used by make (default value is 1)
 THREADS=128
 
 ## Run the testsuite with octave.
