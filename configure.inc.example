@@ -14,8 +14,10 @@ MATLAB_PATH=/usr/local/MATLAB
 
 ## Set branch name to be tested
 GIT_BRANCH=master
- 
-## Set git repository ($USER needs to have an account on Github, identified by a valid ssh key)
+
+## Set the git repository
+##    If the $USER has an account on Github (w SSH key uploaded), the SSH repository will be used
+##    Otherwise, the HTTP repository will be used
 GIT_REPOSITORY_SSH=git@github.com:DynareTeam/dynare.git
 GIT_REPOSITORY_HTTP=https://github.com/DynareTeam/dynare
 

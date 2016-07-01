@@ -46,6 +46,9 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
 {
     cd $TMP_DIR
     git clone --depth 1 --recursive --branch $GIT_BRANCH --single-branch $GIT_REPOSITORY_SSH
+    if [ ! -d "dynare" ]; then
+        git clone --depth 1 --recursive --branch $GIT_BRANCH --single-branch $GIT_REPOSITORY_HTTP
+    fi
     cd dynare
     COMMIT=$(git log -1 --pretty=oneline HEAD)
     if [[ -f $LAST_RAN_COMMIT && "$(cat $LAST_RAN_COMMIT)" == "$(echo $COMMIT)" ]]; then
