@@ -45,7 +45,10 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
 
 {
     cd $TMP_DIR
+    # Don't fail when attempting to clone via SSH
+    set +e
     git clone --depth 1 --recursive --branch $GIT_BRANCH --single-branch $GIT_REPOSITORY_SSH
+    set -e
     if [ ! -d "dynare" ]; then
         git clone --depth 1 --recursive --branch $GIT_BRANCH --single-branch $GIT_REPOSITORY_HTTP
     fi
