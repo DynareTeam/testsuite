@@ -22,10 +22,15 @@ GIT_REPOSITORY_SSH=git@github.com:DynareTeam/dynare.git
 GIT_REPOSITORY_HTTP=https://github.com/DynareTeam/dynare
 
 ## Set variables related to the publication of the results
+#### To publish the results on a web page, set this to true
+PUBLISH_RESULTS=false
 REMOTE_NAME=blagues.fr
 REMOTE_PATH=/var/www/toto/testsuite/$GIT_BRANCH
 SERVER_PATH=$REMOTE_NAME:$REMOTE_PATH
 HTTP_PATH=http://blagues.fr/testsuite/$GIT_BRANCH
+
+#### To send the results via email, set this to true
+EMAIL_RESULTS=true
 MAILTO=dev@blagues.fr
 MAILFROM=toto@blagues.fr
 
