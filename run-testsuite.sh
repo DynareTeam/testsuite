@@ -35,8 +35,10 @@ if $EMAIL_RESULTS ; then
         EXIT=true
     fi
     if $PUBLISH_RESULTS ; then
-        VARS="$VARS, HTTP_PATH"
-        EXIT=true
+	if [[ -z $HTTP_PATH ]]; then
+            VARS="$VARS, HTTP_PATH"
+            EXIT=true
+	fi
     fi
     if $EXIT ; then
         echo 'You want to publish the results of the test suite but have not set one of ' $VARS
