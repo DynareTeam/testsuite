@@ -207,12 +207,15 @@ else
            if $PUBLISH_RESULTS ; then
               if $MATLAB && $OCTAVE ; then
                   echo "A full log can be found at $HTTP_PATH"
+		  echo "Run on Matlab $MATLAB_VERSION and Octave `octave -v | head -1`, `uname -a`"
               fi
               if $MATLAB && ! $OCTAVE ; then
                   echo "A full log can be found at $HTTP_PATH/matlab"
+		  echo "Run on Matlab $MATLAB_VERSION, `uname -a`"
               fi
               if $OCTAVE && ! $MATLAB ; then
                   echo "A full log can be found at $HTTP_PATH/octave"
+		  echo "Run on Octave `octave -v | head -1`, `uname -a`"
               fi
            fi
        } | mail -s "Status of testsuite (sedna) on $GIT_BRANCH branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
