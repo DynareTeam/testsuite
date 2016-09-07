@@ -81,7 +81,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
     fi
     cd dynare
     COMMIT=$(git log -1 --pretty=oneline HEAD)
-    if [[ -f $LAST_RAN_COMMIT && "$(cat $LAST_RAN_COMMIT)" == "$(echo $COMMIT)" ]]; then
+    if [[ (-v FORCE && $FORCE != true) && -f $LAST_RAN_COMMIT && "$(cat $LAST_RAN_COMMIT)" == "$(echo $COMMIT)" ]]; then
         RUN_TESTSUITE=0
     else
         RUN_TESTSUITE=1
