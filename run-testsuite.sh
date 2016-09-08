@@ -220,4 +220,32 @@ else
            fi
        } | mail -s "Status of testsuite (sedna) on $GIT_BRANCH branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
     fi
+
+    # Clean Up /tmp, tar.gz folder and log, keeping latest N_TO_KEEP tarballs
+    N_TO_KEEP=10
+    DATE=`date +%Y-%m-%d-%Hh-%Mm-%Ss`
+
+    cd $TMP_DIR/dynare
+    COMMIT=`git rev-parse HEAD`
+    cd ../..
+
+    NTARS=`(ls -la dynare-$USER-$GIT_BRANCH-*.tar.gz  | wc -l) 2>/dev/null`
+    if [ "$NTARS" -ge "$N_TO_KEEP" ] ; then
+	rm dynare-$USER-$GIT_BRANCH-1-*.tar.gz
+	COUNTER=1
+	while [ $COUNTER -lt $N_TO_KEEP ]; do
+	    OLD_COUNTER=$COUNTER
+	    COUNTER=$(( COUNTER + 1 ))
+	    part2=`ls dynare-$USER-$GIT_BRANCH-$COUNTER-*.tar.gz | cut -f5- -d-`
+	    mv dynare-$USER-$GIT_BRANCH-$COUNTER-*.tar.gz dynare-$USER-$GIT_BRANCH-$OLD_COUNTER-$part2
+	done
+	N=$N_TO_KEEP
+    else
+	N=$(( NTARS + 1 ))
+    fi
+    mv $LOGFILE $TMP_DIR
+    DIR=`basename $TMP_DIR`
+    tar -zcf dynare-$USER-$GIT_BRANCH-$N-$DATE-$COMMIT.tar.gz $DIR
+    rm -rf $DIR
+    rm -f $LOGFILE
 fi
