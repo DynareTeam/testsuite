@@ -218,7 +218,7 @@ else
 		  echo "Run on Octave `octave -v | head -1`, `uname -a`"
               fi
            fi
-       } | mail -s "Status of testsuite (sedna) on $GIT_BRANCH branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
+       } | mail -s "Status of testsuite on $GIT_BRANCH branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
     fi
 
     # Clean Up /tmp, tar.gz folder and log, keeping latest N_TO_KEEP tarballs
