@@ -8,10 +8,6 @@ MATLAB=true
 MATLAB_VERSION=R2014a
 MATLAB_PATH=/usr/local/MATLAB
 
-## Set the path to Octave if $OCTAVE is true and if you do not want to use the binary installed
-## by the package manager
-# OCTAVE_PATH=/home/toto/octave/src
-
 ## Set branch name to be tested
 GIT_BRANCH=master
 
