@@ -47,8 +47,19 @@ if $EMAIL_RESULTS ; then
 fi
 
 # Set paths for Dynare and test folder
-LOGFILE=$(mktemp --tmpdir dynare-$GIT_BRANCH-check-XXXXXXXXXX.log)
-TMP_DIR=$(mktemp --directory --tmpdir dynare-$GIT_BRANCH-XXXXXXXXXX)
+if $MATLAB && $OCTAVE ; then
+    LOGFILE=$(mktemp --tmpdir dynare-$GIT_BRANCH-check-XXXXXXXXXX.log)
+    TMP_DIR=$(mktemp --directory --tmpdir dynare-$GIT_BRANCH-XXXXXXXXXX)
+elif $MATLAB ; then
+    LOGFILE=$(mktemp --tmpdir dynare-m-$GIT_BRANCH-check-XXXXXXXXXX.log)
+    TMP_DIR=$(mktemp --directory --tmpdir dynare-m-$GIT_BRANCH-XXXXXXXXXX)
+elif $OCTAVE ; then
+    LOGFILE=$(mktemp --tmpdir dynare-o-$GIT_BRANCH-check-XXXXXXXXXX.log)
+    TMP_DIR=$(mktemp --directory --tmpdir dynare-o-$GIT_BRANCH-XXXXXXXXXX)
+else
+    echo "MATLAB and OCTAVE variables are false => There is nothing to do, I quit!"
+    exit
+fi
 
 # Define the name of the txt file where a testsuite summary will be written (matlab)
 if $MATLAB
@@ -60,11 +71,6 @@ fi
 if $OCTAVE
     then
         RESULTS_OCTAVE=$TMP_DIR/dynare/tests/run_test_octave_output.txt
-fi
-
-if ! $MATLAB && ! $OCTAVE ; then
-    echo "MATLAB and OCTAVE variables are false => There is nothing to do, I quit!"
-    exit
 fi
 
 # Name of the file containing the hash of the HEAD commit considered in the previous run of the testsuite.
