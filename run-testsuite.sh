@@ -185,6 +185,8 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
 
 if [[ $RUN_TESTSUITE == 0 ]]; then
     rm -f $LOGFILE
+    cd /tmp
+    rm -rf $TMP_DIR
 else
     chmod +r $LOGFILE
     if $EMAIL_RESULTS ; then
