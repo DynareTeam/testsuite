@@ -196,12 +196,19 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
 } >$LOGFILE 2>&1
 
 if [[ $RUN_TESTSUITE == 0 ]]; then
+    ##
+    ## If the testsuite is not triggered (because there is nothing new under the sun, Ecclesiastes  1:4-11),
+    ## then remove temp directory and log file.
+    ##
     rm -f $LOGFILE
     cd /tmp
     rm -rf $TMP_DIR
 else
     chmod +r $LOGFILE
     if $EMAIL_RESULTS ; then
+	##
+	## Send digest by email.
+	##
        {
            cd $TMP_DIR/dynare && git log -1 --pretty=oneline HEAD
            if $MATLAB ; then
@@ -213,15 +220,15 @@ else
            if $PUBLISH_RESULTS ; then
               if $MATLAB && $OCTAVE ; then
                   echo "A full log can be found at $HTTP_PATH"
-		  echo "Run on Matlab $MATLAB_VERSION and Octave `octave -v | head -1`, `uname -a`"
+		  echo "Run on Matlab $MATLAB_VERSION and Octave `octave -v | head -1` by $USER, `uname -a`"
               fi
               if $MATLAB && ! $OCTAVE ; then
                   echo "A full log can be found at $HTTP_PATH/matlab"
-		  echo "Run on Matlab $MATLAB_VERSION, `uname -a`"
+		  echo "Run on Matlab $MATLAB_VERSION by $USER, `uname -a`"
               fi
               if $OCTAVE && ! $MATLAB ; then
                   echo "A full log can be found at $HTTP_PATH/octave"
-		  echo "Run on Octave `octave -v | head -1`, `uname -a`"
+		  echo "Run on Octave `octave -v | head -1` by $USER, `uname -a`"
               fi
            fi
        } | mail -s "Status of testsuite on $GIT_BRANCH branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
@@ -242,5 +249,5 @@ else
     rm -rf $DIR
     # Delete old tarballs
     ((N_TO_KEEP++)) # Increments variable by one.
-    ls -dt dynare-$USER-$GIT_BRANCH-$TARGET-* | tail -n +$N_TO_KEEP | xargs rm -rf
+    ls -dt dynare-$USER-$GIT_BRANCH-$TARGET-* | tail -n +$N_TO_KEEP | xargs rm -f
 fi
