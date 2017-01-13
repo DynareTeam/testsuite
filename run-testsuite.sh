@@ -85,7 +85,6 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
         RUN_TESTSUITE=0
     else
         RUN_TESTSUITE=1
-        echo $COMMIT > $LAST_RAN_COMMIT
         # Compile binaries (preprocessor and mex files)
         autoreconf -i -s
         if $MATLAB && $OCTAVE ; then
@@ -180,6 +179,7 @@ LAST_RAN_COMMIT=$TESTSUITE_CODE_PATH/last-ran-testsuite-$GIT_BRANCH.txt
            cd $ORIGPATH
            set -e
         fi
+	echo $COMMIT > $LAST_RAN_COMMIT
     fi
 } >$LOGFILE 2>&1
 
