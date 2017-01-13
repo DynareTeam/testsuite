@@ -13,6 +13,9 @@ TESTSUITE_TIMING_PATH=$(realpath -s $TESTSUITE_CODE_PATH/../testSuiteTiming)
 # Set a default value for the number of threads
 THREADS=1
 
+# Number of tarballs to keep in /tmp
+N_TO_KEEP=10
+
 # Change default values for the previous variables
 if [ -f  $TESTSUITE_CODE_PATH/configure.inc ]
 then
@@ -222,7 +225,6 @@ else
     fi
 
     # Clean Up /tmp, tar.gz folder and log, keeping latest N_TO_KEEP tarballs
-    N_TO_KEEP=10
     DATE=`date +%Y-%m-%d-%Hh-%Mm-%Ss`
 
     cd $TMP_DIR/dynare

@@ -38,3 +38,6 @@ OCTAVE=false
 
 ## Force the test to run regardless of what the last commit was
 FORCE=false
+
+## Number of tarballs to keep in /tmp
+N_TO_KEEP=4
