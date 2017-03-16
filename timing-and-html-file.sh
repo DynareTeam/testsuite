@@ -16,7 +16,7 @@ SHA=`git rev-parse HEAD`
 TRS_FILES=`find . -regex ".*\.\(trs\)" | sed 's/\.\///'`
 echo $TRS_FILES
 for file in $TRS_FILES; do
-    time=`grep cputime $file | cut -d: -f3 | sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//'`
+    time=`grep elapsed-time $file | cut -d: -f3 | sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//'`
 
     path=`dirname $file`
     mkdir -p $TESTSUITE_TIMING_PATH/$path

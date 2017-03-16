@@ -39,7 +39,7 @@ for csvfile in files:
 
     # Setup figure
     plots[dictkey] = figure(title=mdata.columns.values[1],
-                            y_axis_label="Matlab CPU time",
+                            y_axis_label="Matlab Elapsed time",
                             x_axis_type="datetime",
                             width=800, height=250,
                             logo=None,
@@ -114,7 +114,7 @@ for csvfile in files:
     octmin = min(odata[odata.columns.values[1]]) - 1
     octmax = max(odata[odata.columns.values[1]]) + 1
     plots[dictkey].extra_y_ranges = {"octave": Range1d(start=octmin, end=octmax)}
-    plots[dictkey].add_layout(LinearAxis(y_range_name="octave", axis_label="Octave CPU time", axis_label_text_color=octavecolor), 'right')
+    plots[dictkey].add_layout(LinearAxis(y_range_name="octave", axis_label="Octave Elapsed time", axis_label_text_color=octavecolor), 'right')
 
     # Plot Octave line
     plots[dictkey].line('x', 'y', color=octavecolor, line_width=line_width, line_alpha=opacity, source=osource)
