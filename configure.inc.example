@@ -41,3 +41,6 @@ FORCE=false
 
 ## Number of tarballs to keep in /tmp
 N_TO_KEEP=4
+
+## User-preferred logfile location
+# LOGFILE = /home/user/testsuite-output.log

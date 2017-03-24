@@ -51,15 +51,21 @@ fi
 
 # Set paths for Dynare and test folder
 if $MATLAB && $OCTAVE ; then
-    LOGFILE=$(mktemp --tmpdir dynare-$GIT_BRANCH-check-XXXXXXXXXX.log)
+    if [ ! -n "$LOGFILE" ]; then
+	LOGFILE=$(mktemp --tmpdir dynare-$GIT_BRANCH-check-XXXXXXXXXX.log)
+    fi
     TMP_DIR=$(mktemp --directory --tmpdir dynare-$GIT_BRANCH-XXXXXXXXXX)
     TARGET=all
 elif $MATLAB ; then
-    LOGFILE=$(mktemp --tmpdir dynare-m-$GIT_BRANCH-check-XXXXXXXXXX.log)
+    if [ ! -n "$LOGFILE" ]; then
+	LOGFILE=$(mktemp --tmpdir dynare-m-$GIT_BRANCH-check-XXXXXXXXXX.log)
+    fi
     TMP_DIR=$(mktemp --directory --tmpdir dynare-m-$GIT_BRANCH-XXXXXXXXXX)
     TARGET=matlab
 elif $OCTAVE ; then
-    LOGFILE=$(mktemp --tmpdir dynare-o-$GIT_BRANCH-check-XXXXXXXXXX.log)
+    if [ ! -n "$LOGFILE" ]; then
+	LOGFILE=$(mktemp --tmpdir dynare-o-$GIT_BRANCH-check-XXXXXXXXXX.log)
+    fi
     TMP_DIR=$(mktemp --directory --tmpdir dynare-o-$GIT_BRANCH-XXXXXXXXXX)
     TARGET=octave
 else
