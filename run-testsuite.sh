@@ -215,6 +215,11 @@ else
 	##
 	## Send digest by email.
 	##
+        if $MATLAB && ! $OCTAVE; then
+            PLATFORM=" (MATLAB)"
+        elif $OCTAVE && ! $MATLAB; then
+            PLATFORM=" (Octave)"
+        fi
        {
            cd $TMP_DIR/dynare && git log -1 --pretty=oneline HEAD
            if $MATLAB ; then
@@ -237,7 +242,7 @@ else
 		  echo "Run on Octave `octave -v | head -1` by $USER, `uname -a`"
               fi
            fi
-       } | mail -s "Status of testsuite on $GIT_BRANCH branch" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
+       } | mail -s "Status of testsuite on $GIT_BRANCH branch$PLATFORM" $MAILTO -aFrom:"Dynare Robot <"$MAILFROM">"
     fi
     ##
     ## Clean Up /tmp, tar.gz folder and log, keeping latest N_TO_KEEP tarballs
